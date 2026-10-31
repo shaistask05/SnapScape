@@ -1,3 +1,3 @@
 # SnapScape
 
-Project setup in progress.
+SnapScape is a visual discovery app where people will be able to search a topic and explore a responsive wall of images. I chose a warm sand, terracotta, and deep-green palette to give the app a calm editorial feel instead of copying the reference project's colours. The large serif headline makes the page feel like a visual magazine, while the quick-pick topic chips help visitors think of something to search. An empty-state message and result-count placeholder make the results area understandable before the first search. This is Part 1: the HTML and CSS interface is ready, and search functionality will be added in Part 2.
