@@ -1,4 +1,4 @@
-// SnapScape Part 2: search Wikimedia Commons and render image cards.
+// SnapScape Part 3: loading, empty, and error states.
 
 const form = document.getElementById("search-form");
 const input = document.getElementById("topic-input");
@@ -6,6 +6,7 @@ const results = document.getElementById("results");
 const resultCount = document.getElementById("result-count");
 const emptyState = document.getElementById("empty-state");
 const searchButton = document.getElementById("search-button");
+const statusMessage = document.getElementById("status-message");
 
 async function searchImages(query) {
   const url =
@@ -15,31 +16,60 @@ async function searchImages(query) {
 
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error("Image search failed. Please try again.");
+    throw new Error("The image service returned an error (" + response.status + ").");
   }
 
   const data = await response.json();
-  return data.query ? Object.values(data.query.pages) : [];
+  if (!data.query || !data.query.pages) return [];
+  return Object.values(data.query.pages).filter((item) =>
+    item.imageinfo && item.imageinfo[0] && (item.imageinfo[0].thumburl || item.imageinfo[0].url)
+  );
+}
+
+function showLoading() {
+  results.innerHTML = "";
+  emptyState.hidden = true;
+  resultCount.textContent = "Searching…";
+  statusMessage.dataset.state = "loading";
+  statusMessage.innerHTML = '<span class="spinner" aria-hidden="true"></span>Searching for images…';
+  for (let i = 0; i < 6; i += 1) {
+    const skeleton = document.createElement("div");
+    skeleton.className = "skeleton-card";
+    skeleton.setAttribute("aria-hidden", "true");
+    skeleton.innerHTML = '<div class="skeleton-image"></div><div class="skeleton-caption"></div>';
+    results.appendChild(skeleton);
+  }
+}
+
+function showEmpty(query) {
+  results.innerHTML = "";
+  resultCount.textContent = "0 images found";
+  statusMessage.dataset.state = "empty";
+  statusMessage.textContent = "No results for “" + query + "”. Try another search.";
+  emptyState.hidden = false;
+  emptyState.querySelector("h3").textContent = "No images found this time.";
+  emptyState.querySelector("p").textContent = "Try another word or a broader topic.";
+}
+
+function showError() {
+  results.innerHTML = "";
+  resultCount.textContent = "Search unavailable";
+  statusMessage.dataset.state = "error";
+  statusMessage.textContent = "Something went wrong. Please check your connection and try again.";
+  emptyState.hidden = false;
+  emptyState.querySelector("h3").textContent = "We couldn't load those images.";
+  emptyState.querySelector("p").textContent = "Your search is safe. Please try again in a moment.";
 }
 
 function renderImages(items, query) {
   results.innerHTML = "";
-
-  if (items.length === 0) {
-    resultCount.textContent = 'No images found for "' + query + '"';
-    emptyState.hidden = false;
-    emptyState.querySelector("h3").textContent = "No images found this time.";
-    emptyState.querySelector("p").textContent = "Try another word or a broader topic.";
-    return;
-  }
-
   emptyState.hidden = true;
   resultCount.textContent = "Showing " + items.length + ' images for "' + query + '"';
+  statusMessage.dataset.state = "success";
+  statusMessage.textContent = "Your image collection is ready.";
 
   items.forEach((item) => {
-    const imageInfo = item.imageinfo && item.imageinfo[0];
-    if (!imageInfo) return;
-
+    const imageInfo = item.imageinfo[0];
     const card = document.createElement("article");
     card.className = "image-card";
 
@@ -66,27 +96,40 @@ function renderImages(items, query) {
   });
 }
 
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const query = input.value.trim();
-  if (!query) return;
-
+async function runSearch(query) {
   searchButton.disabled = true;
   searchButton.textContent = "Searching…";
-  resultCount.textContent = "Finding images…";
+  showLoading();
 
   try {
     const items = await searchImages(query);
-    renderImages(items, query);
+    if (items.length === 0) {
+      showEmpty(query);
+    } else {
+      renderImages(items, query);
+    }
   } catch (error) {
-    resultCount.textContent = error.message;
+    console.error("SnapScape search error:", error);
+    showError();
   } finally {
     searchButton.disabled = false;
     searchButton.innerHTML = 'Explore <span aria-hidden="true">↗</span>';
   }
+}
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const query = input.value.trim();
+  if (!query) {
+    statusMessage.dataset.state = "error";
+    statusMessage.textContent = "Please enter a topic before searching.";
+    input.focus();
+    return;
+  }
+  runSearch(query);
 });
 
-// Quick-pick chips run the same search as the form.
+// Quick-pick chips use the same search flow.
 document.querySelectorAll(".chip").forEach((chip) => {
   chip.addEventListener("click", () => {
     input.value = chip.textContent.trim();
