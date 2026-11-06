@@ -197,3 +197,46 @@ footer span:first-child { color: var(--ink); font-weight: 700; letter-spacing: .
 }
 .search-row button:disabled { opacity: .65; cursor: wait; }
 .empty-state[hidden] { display: none; }
+
+
+/* Part 3: clear loading, empty, and error states */
+.status-message {
+  min-height: 22px;
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: .86rem;
+  line-height: 1.5;
+}
+.status-message[data-state="error"] { color: #a33f2b; }
+.status-message[data-state="success"] { color: #356b4b; }
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  vertical-align: -2px;
+  border: 2px solid #e7c9b9;
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: snapspin .7s linear infinite;
+}
+@keyframes snapspin { to { transform: rotate(360deg); } }
+.skeleton-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--white);
+}
+.skeleton-image {
+  height: 205px;
+  background: linear-gradient(90deg, #e9e5d9 25%, #f5f1e8 50%, #e9e5d9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.3s ease-in-out infinite;
+}
+.skeleton-caption { height: 42px; margin: 12px 14px; border-radius: 6px; background: #eeeae0; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+.image-card { animation: card-in .35s ease both; }
+@keyframes card-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+}
