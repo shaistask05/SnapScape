@@ -1,15 +1,36 @@
 # SnapScape
 
-SnapScape is a visual discovery app where people can search a topic and explore a responsive wall of images. Its warm sand, terracotta, and deep-green palette gives the app a calm editorial feel. The large serif headline makes the page feel like a visual magazine, while quick-pick topic chips make it easy to start exploring.
+SnapScape is a visual discovery app where people can search a topic and explore a responsive wall of images. Its warm sand, terracotta, and deep-green palette gives the app a calm editorial feel.
 
-## Part 2: Fetch and render
+## Features
 
-- Submitting the search form (with Enter or the Explore button) prevents a page reload and reads the search term.
-- The app requests up to 12 matching files from the Wikimedia Commons API.
-- It checks the response, parses the JSON, clears previous cards, and renders each image with a caption.
-- The result count shows how many images were found.
-- Quick-pick chips launch searches, and clicking an image opens its Commons page in a new tab.
+- Searches Wikimedia Commons for up to 12 images.
+- Shows a loading message, spinner, and skeleton cards while fetching.
+- Shows a friendly empty state when a search has no results.
+- Catches network/API errors and displays a helpful error message.
+- Displays a result count and animated image cards.
+- Includes quick-pick topic chips and a responsive layout.
+- Built with plain HTML, CSS, and JavaScript. No framework or API key is required.
 
 ## Run locally
 
-Open `index.html` in a browser. No framework, build tool, or API key is required.
+Open `index.html` in a browser, enter a topic, and press Explore.
+
+## Deploy
+
+This project is a static website and can be hosted with GitHub Pages, Netlify, or Vercel.
+
+For GitHub Pages:
+1. Open the repository Settings.
+2. Select Pages.
+3. Under Build and deployment, choose Deploy from a branch.
+4. Select the `main` branch and `/(root)`, then Save.
+5. After the Part 3 pull request is reviewed and merged into `main`, the public site will be available at:
+   https://shaistask05.github.io/SnapScape/
+
+## Part 3 testing checklist
+
+- Search a normal topic such as Nature and confirm images appear.
+- Search a nonsense word such as zxqwlk and confirm the no-results message appears.
+- Temporarily go offline or use an invalid API endpoint to confirm the friendly error state.
+- Use browser DevTools network throttling to see the loading spinner and skeleton cards.
