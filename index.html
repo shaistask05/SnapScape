@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SnapScape — a visual discovery space for the things you love." />
+  <title>SnapScape — Find your next view</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="SnapScape home"><span class="brand-mark">S</span> SnapScape</a>
+    <span class="header-note">A little inspiration, one search away.</span>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">THE WORLD, IN FRAMES</p>
+      <h1 id="page-title">Find your next<br /><span>point of view.</span></h1>
+      <p class="intro-copy">From quiet corners to faraway places, explore images that spark your curiosity.</p>
+
+      <form id="search-form" class="search-panel">
+        <label for="topic-input">WHAT ARE YOU LOOKING FOR?</label>
+        <div class="search-row">
+          <input id="topic-input" type="search" placeholder="Try “mountain mornings”..." aria-label="Search for an image topic" />
+          <button id="search-button" type="submit">Explore <span aria-hidden="true">↗</span></button>
+        </div>
+      </form>
+
+      <div class="quick-picks" aria-label="Suggested search topics">
+        <span class="pick-label">QUICK IDEAS</span>
+        <button class="chip" type="button">Nature</button>
+        <button class="chip" type="button">Architecture</button>
+        <button class="chip" type="button">Wildlife</button>
+        <button class="chip" type="button">Travel</button>
+      </div>
+    </section>
+
+    <section class="discover" aria-labelledby="discover-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">YOUR CANVAS</p>
+          <h2 id="discover-title">A world waiting to be found</h2>
+        </div>
+        <p id="result-count" class="result-count">0 images found</p>
+      </div>
+      <p id="status-message" class="status-message" role="status" aria-live="polite">Type a topic above and press Explore to begin.</p>
+      <div id="results" class="results-grid" aria-live="polite"></div>
+      <div id="empty-state" class="empty-state">
+        <span class="empty-icon" aria-hidden="true">✳</span>
+        <h3>Your next discovery starts here.</h3>
+        <p>Enter a topic above and your image collection will appear in this space.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>SNAPSCAPE</span><span>Curiosity looks good on you.</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>
